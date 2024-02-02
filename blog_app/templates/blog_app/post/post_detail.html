@@ -1,0 +1,48 @@
+{% extends 'blog_app/base.html' %}
+{% load blog_tags %}
+{% block content %}
+  <div class="container mt-4">
+    <div class="card">
+      <div class="card-body">
+        <h1 class="card-title">{{ post.title }}</h1>
+        <p class="card-subtitle text-muted">Published {{ post.publish|date:'F d, Y' }} by {{ post.author }}</p>
+        <hr />
+
+        <div class="card-text">{{ post.body|markdown }}</div>
+      </div>
+    </div>
+
+    <div class="mt-3">
+      <a class="btn btn-primary" href="{% url 'blog_app:post_share' post.id %}">Share this post</a>
+    </div>
+
+    <h2>Similar Posts</h2>
+    {% for post in similar_posts %}
+      <p>
+        <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+      </p>
+      {% empty %}There are no similar posts yet.
+    {% endfor %}
+
+    {% with comments.count as total_comments %}
+      <h2 class="mt-4">{{ total_comments }} comment{{ total_comments|pluralize }}</h2>
+    {% endwith %}
+
+    {% for comment in comments %}
+      <div class="card mt-3">
+        <div class="card-body">
+          <p class="card-text text-muted">Comment {{ forloop.counter }} by {{ comment.name }} on {{ comment.created|date:'F d, Y' }}</p>
+          <div class="card-text">{{ comment.body|linebreaks }}</div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="mt-3">
+        <p class="text-muted">There are no comments.</p>
+      </div>
+    {% endfor %}
+
+    <div class="mt-4">
+      {% include 'blog_app/post/includes/comment_form.html' %}
+    </div>
+  </div>
+{% endblock %}

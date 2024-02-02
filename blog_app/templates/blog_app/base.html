@@ -1,0 +1,86 @@
+{% load blog_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>the-ml-apprentice</title>
+
+    <!-- Bootstrap CSS link (assuming you're using Bootstrap) -->
+    <link rel="stylesheet" type='text/css' href="https://bootswatch.com/5/flatly/bootstrap.min.css">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'blog_app:post_list' %}"><img src="{% static 'blog_app/logo.png' %}" alt="Logo" height="30" class="d-inline-block align-text-top" /></a>
+
+        <!-- Search Form -->
+        <!-- base.html -->
+        <form class="d-flex" role="search" method="get" action="{% url 'blog_app:search' %}">
+          {% csrf_token %}
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query" />
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+
+        <!-- End Search Form -->
+      </div>
+    </nav>
+    <!-- End Navbar -->
+
+    <!-- Bootstrap JS and Popper.js scripts (assuming you're using Bootstrap) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div id="content">
+      {% block content %}
+
+      {% endblock %}
+    </div>
+    <div id="sidebar">
+      {% comment %} <p>
+        The Machine Learning Apprentice We've written {% total_posts %} blog posts so far.
+      </p> {% endcomment %}
+      <p>
+        <a href="{% url 'blog_app:post_feed' %}">Subscribe to my RSS FEED</a>
+      </p>
+      <h3>Latest Posts</h3>
+      {% show_latest_posts 3 %}
+      <h3>Most Commented posts</h3>
+      {% get_most_commented_posts as most_commented_posts %}
+      <ul>
+        {% for post in most_commented_posts %}
+          <li>
+            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </body>
+  <!-- Footer -->
+  <footer class="bg-light text-dark py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h5>Contact Us</h5>
+          <p>Email: info@mlapprentice.com</p>
+        </div>
+        <div class="col-md-6">
+          <h5>Follow Us</h5>
+          <ul class="list-inline">
+            <li class="list-inline-item">
+              <a href="#" class="text-dark">Facebook</a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#" class="text-dark">Twitter</a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#" class="text-dark">LinkedIn</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- End Footer -->
+</html>
